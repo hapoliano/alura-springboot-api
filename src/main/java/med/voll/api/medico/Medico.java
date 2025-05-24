@@ -1,29 +1,20 @@
 package med.voll.api.medico;
 
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.endereco.Endereco;
+import org.hibernate.proxy.HibernateProxy;
+
+import java.util.Objects;
 
 @Table(name = "medicos")
 @Entity(name = "Medico")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
 public class Medico {
-
-	public Medico() {
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,64 +54,23 @@ public class Medico {
 		}
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getTelefone() {
-		return telefone;
-	}
-
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
-
-	public String getCrm() {
-		return crm;
-	}
-
-	public void setCrm(String crm) {
-		this.crm = crm;
-	}
-
-	public Especialidade getEspecialidade() {
-		return especialidade;
-	}
-
-	public void setEspecialidade(Especialidade especialidade) {
-		this.especialidade = especialidade;
-	}
-
-	public Endereco getEndereco() {
-		return endereco;
-	}
-
-	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
-	}
-
 	public void excluir() {
 		this.ativo = false;
 	}
 
+	@Override
+	public final boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null) return false;
+		Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+		Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+		if (thisEffectiveClass != oEffectiveClass) return false;
+		Medico medico = (Medico) o;
+		return getId() != null && Objects.equals(getId(), medico.getId());
+	}
+
+	@Override
+	public final int hashCode() {
+		return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+	}
 }
